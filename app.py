@@ -7,7 +7,7 @@ app = Flask(__name__)
 # --- CONFIGURAÇÕES DA Z-API ---
 ZAPI_SESSION_ID = "3E77B2035F45402782BF326225A8F6AC"
 ZAPI_KEY = "6DB75F5621F7FF2F4A24B285"
-ZAPI_CLIENT_TOKEN = ""  # deixe vazio se não usar, ou coloque o gerado no painel da Z-API
+ZAPI_CLIENT_TOKEN = "F30d06daf1a0749b8991c7b3c37e0e873S"  # deixe vazio se não usar, ou coloque o gerado no painel da Z-API
 
 # --- URL RAW DO JSON NO GITHUB ---
 URL_GRUPOS_JSON = "https://raw.githubusercontent.com/rafa5115/botzap/main/grupos.json"
@@ -99,3 +99,4 @@ https://entrar-agora.short.gy/grupo-puxadas-whatsapp
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8081)
+
