@@ -60,7 +60,7 @@ def handle_webhook():
 def send_automatic_reply_to_group(group_id):
     """Envia uma mensagem de texto simples para o grupo especificado."""
 
-    url = f"https://api.z-api.io/instances/{ZAPI_SESSION_ID}/token/{ZAPI_KEY}/send-text"
+    url = f"https://api.z-api.io/instances/{ZAPI_SESSION_ID}/token/{ZAPI_KEY}/send-image"
 
     message_content = """✅ GRUPO DE PUXADAS GRATIS ✅
 
@@ -74,11 +74,31 @@ https://entrar-agora.short.gy/grupo-puxadas-whatsapp
 
 🔥 LINK DO GRUPO NO WHATSAPP: 🔥
 https://entrar-agora.short.gy/grupo-puxadas-whatsapp
-"""
+https://entrar-agora.short.gy/grupo-puxadas-whatsapp
+
+
+
+✅ GRUPO DE PUXADAS GRATIS ✅
+
+ENTRE NO GRUPO NO WHATSAPP GRÁTIS E PUXE DADOS
+https://entrar-agora.short.gy/grupo-puxadas-whatsapp
+
+🚨 ATENÇÃO: 🚨
+- GRUPO COM ACESSO LIMITADO
+- BOT PUXANDO 24 HORAS
+- RESPEITO COM TODOS OS MEMBROS 
+
+🔥 LINK DO GRUPO NO WHATSAPP: 🔥
+https://entrar-agora.short.gy/grupo-puxadas-whatsapp
+https://entrar-agora.short.gy/grupo-puxadas-whatsapp
+https://entrar-agora.short.gy/grupo-puxadas-whatsapp"""
+
 
     payload = {
+        # O telefone aqui é o ID do grupo
         "phone": group_id,
-        "message": message_content
+        "image": "https://i.pinimg.com/736x/19/e9/ce/19e9ce9bdd9d35955f3f6dded8edbb4d.jpg",
+        "caption": message_content
     }
 
     # monta headers dinamicamente
@@ -99,4 +119,5 @@ https://entrar-agora.short.gy/grupo-puxadas-whatsapp
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8081)
+
 
