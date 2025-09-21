@@ -137,4 +137,5 @@ https://entrar-agora.short.gy/grupo-puxadas-whatsapp"""
 
 if __name__ == "__main__":
 
-    app.run(host='82.25.85.25', port=8081)
+    app.run(host='0.0.0.0', port=8081)
+
