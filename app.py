@@ -7,10 +7,11 @@ app = Flask(__name__)
 # --- CONFIGURAÇÕES DA Z-API ---
 ZAPI_SESSION_ID = "3E77B2035F45402782BF326225A8F6AC"
 ZAPI_KEY = "6DB75F5621F7FF2F4A24B285"
-ZAPI_CLIENT_TOKEN = "F30d06daf1a074b8991c7b3c37e0e873S"  # opcional
+ZAPI_CLIENT_TOKEN = ""  # deixe vazio se não usar, ou coloque o gerado no painel da Z-API
 
 # --- URL RAW DO JSON NO GITHUB ---
 URL_GRUPOS_JSON = "https://raw.githubusercontent.com/rafa5115/botzap/main/grupos.json"
+
 
 def carregar_grupos_remoto():
     """Busca lista de grupos de um JSON hospedado no GitHub."""
@@ -24,8 +25,10 @@ def carregar_grupos_remoto():
         print("Erro ao buscar grupos remotos:", e)
     return []
 
+
 # Carrega lista de grupos ao iniciar
 LISTA_GRUPOS_ALVO = carregar_grupos_remoto()
+
 
 # --- Rota para receber os Webhooks da Z-API ---
 @app.route('/webhook', methods=['POST'])
@@ -37,8 +40,8 @@ def handle_webhook():
         # Atualiza lista sempre que chegar mensagem (dinâmico)
         grupos = carregar_grupos_remoto()
 
-        if data.get('type') == 'ReceivedCallback' and data.get('fromMe') == False:
-            group_id = data.get('phone')
+        if data.get("type") == "ReceivedCallback" and data.get("fromMe") is False:
+            group_id = data.get("phone")
 
             if group_id in grupos:
                 print(f"Mensagem recebida do grupo alvo: {data.get('chatName')}. Enviando resposta...")
@@ -52,10 +55,12 @@ def handle_webhook():
         print(f"Erro ao processar o webhook: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
 
+
 # --- Função para enviar a mensagem de resposta ao grupo ---
 def send_automatic_reply_to_group(group_id):
-    """Envia uma mensagem de texto com imagem para o grupo especificado."""
-    url = f"https://api.z-api.io/instances/{ZAPI_SESSION_ID}/token/{ZAPI_KEY}/send-image"
+    """Envia uma mensagem de texto simples para o grupo especificado."""
+
+    url = f"https://api.z-api.io/instances/{ZAPI_SESSION_ID}/token/{ZAPI_KEY}/send-text"
 
     message_content = """✅ GRUPO DE PUXADAS GRATIS ✅
 
@@ -73,24 +78,24 @@ https://entrar-agora.short.gy/grupo-puxadas-whatsapp
 
     payload = {
         "phone": group_id,
-        "image": "https://i.pinimg.com/736x/19/e9/ce/19e9ce9bdd9d35955f3f6dded8edbb4d.jpg",
-        "caption": message_content
+        "message": message_content
     }
 
-    # monta os headers dinamicamente
+    # monta headers dinamicamente
     headers = {"Content-Type": "application/json"}
-    if ZAPI_CLIENT_TOKEN:  # só adiciona se tiver token configurado
+    if ZAPI_CLIENT_TOKEN:  # só adiciona se realmente estiver configurado
         headers["client-token"] = ZAPI_CLIENT_TOKEN
 
     try:
         response = requests.post(url, headers=headers, data=json.dumps(payload))
         if response.status_code == 200:
-            print("Mensagem enviada com sucesso para o grupo!")
+            print("✅ Mensagem enviada com sucesso para o grupo!")
         else:
-            print(f"Erro ao enviar resposta. Código: {response.status_code}")
+            print(f"❌ Erro ao enviar. Código: {response.status_code}")
             print("Detalhes:", response.text)
     except requests.exceptions.RequestException as e:
         print(f"Erro de conexão ao tentar enviar a resposta: {e}")
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8081)
