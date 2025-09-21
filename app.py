@@ -136,4 +136,5 @@ https://entrar-agora.short.gy/grupo-puxadas-whatsapp"""
         print(f"Erro de conexão ao tentar enviar a resposta: {e}")
 
 if __name__ == "__main__":
-    app.run(host='82.25.85.25', port=8080)
+
+    app.run(host='82.25.85.25', port=8081)
