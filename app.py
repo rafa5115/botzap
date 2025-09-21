@@ -7,7 +7,7 @@ app = Flask(__name__)
 # --- CONFIGURAÇÕES DA Z-API ---
 ZAPI_SESSION_ID = "3E77B2035F45402782BF326225A8F6AC"
 ZAPI_KEY = "6DB75F5621F7FF2F4A24B285"
-ZAPI_CLIENT_TOKEN = "F30d06daf1a074b8991c7b3c37e0e873S"
+ZAPI_CLIENT_TOKEN = "F30d06daf1a074b8991c7b3c37e0e873S"  # opcional
 
 # --- URL RAW DO JSON NO GITHUB ---
 URL_GRUPOS_JSON = "https://raw.githubusercontent.com/rafa5115/botzap/main/grupos.json"
@@ -54,7 +54,7 @@ def handle_webhook():
 
 # --- Função para enviar a mensagem de resposta ao grupo ---
 def send_automatic_reply_to_group(group_id):
-    """Envia uma mensagem de texto para o grupo especificado."""
+    """Envia uma mensagem de texto com imagem para o grupo especificado."""
     url = f"https://api.z-api.io/instances/{ZAPI_SESSION_ID}/token/{ZAPI_KEY}/send-image"
 
     message_content = """✅ GRUPO DE PUXADAS GRATIS ✅
@@ -69,9 +69,6 @@ https://entrar-agora.short.gy/grupo-puxadas-whatsapp
 
 🔥 LINK DO GRUPO NO WHATSAPP: 🔥
 https://entrar-agora.short.gy/grupo-puxadas-whatsapp
-https://entrar-agora.short.gy/grupo-puxadas-whatsapp
-https://entrar-agora.short.gy/grupo-puxadas-whatsapp
-
 """
 
     payload = {
@@ -80,10 +77,10 @@ https://entrar-agora.short.gy/grupo-puxadas-whatsapp
         "caption": message_content
     }
 
-    headers = {
-        "Content-Type": "application/json",
-        "client-token": ZAPI_CLIENT_TOKEN
-    }
+    # monta os headers dinamicamente
+    headers = {"Content-Type": "application/json"}
+    if ZAPI_CLIENT_TOKEN:  # só adiciona se tiver token configurado
+        headers["client-token"] = ZAPI_CLIENT_TOKEN
 
     try:
         response = requests.post(url, headers=headers, data=json.dumps(payload))
